@@ -22,7 +22,7 @@ const table = {
   
   function romanToInt(roman) {
     roman.toUpperCase()
-    let int = 0 // result
+    let int = 0 // define your result
   
     // step 2, iterate over the input
     for (let i = 0; i < roman.length; i++) {
@@ -41,5 +41,3 @@ const table = {
   
     return int
   }
-  
-  romanToInt('CDII')
