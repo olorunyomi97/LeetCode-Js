@@ -1,4 +1,4 @@
-/**
+/** BIG ASTERIK ON THIS SOLUTION
  * @param {number[]} digits
  * @return {number[]}
  */
