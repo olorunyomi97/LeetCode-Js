@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Enter Weights</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">Label Station</div>
+    <nav>
+      <a class="link" href="/">Source</a>
+      <a class="link" href="/history">History</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <h1>Enter Weights</h1>
+    <div class="two-col">
+      <form method="post" action="/weights" class="weights-form">
+        <label>Net Weight (lbs)
+          <input name="net" id="net" inputmode="decimal" value="{{ state.get('net_lbs','') }}" />
+        </label>
+        <label>Gross Weight (lbs)
+          <input name="gross" id="gross" inputmode="decimal" value="{{ state.get('gross_lbs','') }}" />
+        </label>
+        <label>Tare Weight (lbs)
+          <input name="tare" id="tare" inputmode="decimal" value="{{ state.get('tare_lbs','') }}" />
+        </label>
+        <div class="actions">
+          <button class="btn primary" type="submit">Preview</button>
+          <a class="btn ghost" href="/">Back</a>
+        </div>
+      </form>
+
+      <div class="keypad">
+        <div class="keys">
+          {% for n in ['1','2','3','4','5','6','7','8','9','0','.'] %}
+            <button type="button" class="btn" onclick="tap('{{ n }}')">{{ n }}</button>
+          {% endfor %}
+          <button type="button" class="btn danger" onclick="backspace()">⌫</button>
+          <button type="button" class="btn ghost" onclick="clearField()">Clear</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    let active = document.getElementById('net');
+    document.querySelectorAll('input').forEach(i=>{
+      i.addEventListener('focus', ()=> active = i);
+    });
+    function tap(ch){
+      if(!active) return;
+      active.value += ch;
+      active.dispatchEvent(new Event('input'));
+    }
+    function backspace(){
+      if(!active) return;
+      active.value = active.value.slice(0,-1);
+    }
+    function clearField(){
+      if(!active) return;
+      active.value = '';
+    }
+  </script>
+</body>
+</html>
