@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Print History</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">Label Station</div>
+    <nav>
+      <a class="link" href="/">Source</a>
+      <a class="link" href="/history">History</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <h1>Recent Labels</h1>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Time (UTC)</th>
+          <th>Lot</th>
+          <th>Unit</th>
+          <th>Gross</th>
+          <th>Net</th>
+          <th>Tare</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for e in entries %}
+        <tr>
+          <td>{{ e.get('timestamp','') }}</td>
+          <td>{{ e.get('lot_code','') }}</td>
+          <td>{{ e.get('unit_number','') }}</td>
+          <td>{{ e.get('gross_lbs','') }}</td>
+          <td>{{ e.get('net_lbs','') }}</td>
+          <td>{{ e.get('tare_lbs','') }}</td>
+          <td>
+            <form method="post" action="/reprint">
+              <input type="hidden" name="index" value="{{ loop.revindex0 }}" />
+              <button class="btn small">Reprint</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </main>
+</body>
+</html>

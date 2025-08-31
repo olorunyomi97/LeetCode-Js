@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Choose Source</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">Label Station</div>
+    <nav>
+      <a class="link" href="/history">History</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-wrap">
+          {% for category, message in messages %}
+            <div class="flash {{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <h1>Choose Source</h1>
+
+    <form method="post" action="/choose" id="choose-form">
+      <input type="hidden" name="source_type" id="source_type" />
+      <input type="hidden" name="source_value" id="source_value" />
+
+      <div class="grid three">
+        <section>
+          <h2>Silo</h2>
+          <div class="btn-grid">
+            {% for v in ['A','B','C','D'] %}
+              <button type="button" class="btn" onclick="choose('silo','{{v}}')">{{ v }}</button>
+            {% endfor %}
+          </div>
+        </section>
+
+        <section>
+          <h2>Dryer</h2>
+          <div class="btn-grid">
+            {% for v in ['A','B','C','D'] %}
+              <button type="button" class="btn" onclick="choose('dryer','{{v}}')">{{ v }}</button>
+            {% endfor %}
+          </div>
+        </section>
+
+        <section>
+          <h2>Compound</h2>
+          <div class="btn-grid">
+            {% for v in ['A','B'] %}
+              <button type="button" class="btn" onclick="choose('compound','{{v}}')">{{ v }}</button>
+            {% endfor %}
+          </div>
+        </section>
+      </div>
+
+      <div class="actions">
+        <button class="btn primary" type="submit">Continue</button>
+        <a class="btn ghost" href="/clear">Reset</a>
+      </div>
+    </form>
+  </main>
+
+  <script>
+    function choose(type, value){
+      document.getElementById('source_type').value = type;
+      document.getElementById('source_value').value = value;
+      document.getElementById('choose-form').submit();
+    }
+  </script>
+</body>
+</html>

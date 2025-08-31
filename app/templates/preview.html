@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Print Preview</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">Label Station</div>
+    <nav>
+      <a class="link" href="/">Source</a>
+      <a class="link" href="/weights">Weights</a>
+      <a class="link" href="/history">History</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <h1>Preview</h1>
+
+    <div class="preview-card">
+      <div class="label">
+        <div class="label-header">NYLENE CANADA</div>
+        <div class="label-lot">{{ state.get('lot_code','') }}</div>
+        <div class="label-weights">
+          <div><strong>Gross wt/</strong> {{ state.get('gross_lbs','') }} lbs ({{ state.get('gross_lbs','')|kg }} kgs)</div>
+          <div><strong>Net wt/</strong> {{ state.get('net_lbs','') }} lbs ({{ state.get('net_lbs','')|kg }} kgs)</div>
+          <div><strong>Tare wt/</strong> {{ state.get('tare_lbs','') }} lbs ({{ state.get('tare_lbs','')|kg }} kgs)</div>
+        </div>
+        <div class="label-material">NYLON 6</div>
+        <div class="label-unit">{{ state.get('unit_number','') }}</div>
+      </div>
+    </div>
+
+    <form method="post" action="/print" class="actions">
+      <button class="btn primary" type="submit">Print</button>
+      <a class="btn" href="/weights">Modify</a>
+      <a class="btn ghost" href="/clear">Clear</a>
+    </form>
+  </main>
+</body>
+</html>
