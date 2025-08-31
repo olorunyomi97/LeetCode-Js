@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Label Printer (HTML/CSS/JS)</title>
+  <link rel="stylesheet" href="./styles.css" />
+  <!-- Libraries: CSV, Barcode, QR -->
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+  <header class="app-header">
+    <h1>Label Printer</h1>
+    <div class="header-actions">
+      <button id="btn-load-demo" class="btn">Load Demo</button>
+      <button id="btn-clear" class="btn btn-secondary">Clear</button>
+      <button id="btn-print" class="btn btn-primary">Print</button>
+    </div>
+  </header>
+
+  <main class="app-main">
+    <aside class="sidebar">
+      <section class="panel">
+        <h2>Page</h2>
+        <div class="field">
+          <label for="page-size">Preset</label>
+          <select id="page-size">
+            <option value="A4">A4 (210x297mm)</option>
+            <option value="Letter">US Letter (216x279mm)</option>
+            <option value="4x6">4" x 6" (101.6x152.4mm)</option>
+            <option value="Custom">Custom</option>
+          </select>
+        </div>
+        <div class="grid-2">
+          <div class="field">
+            <label for="page-width">Width (mm)</label>
+            <input id="page-width" type="number" step="0.1" min="10" />
+          </div>
+          <div class="field">
+            <label for="page-height">Height (mm)</label>
+            <input id="page-height" type="number" step="0.1" min="10" />
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="field">
+            <label for="margin-x">Margins X (mm)</label>
+            <input id="margin-x" type="number" step="0.1" min="0" />
+          </div>
+          <div class="field">
+            <label for="margin-y">Margins Y (mm)</label>
+            <input id="margin-y" type="number" step="0.1" min="0" />
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Label</h2>
+        <div class="grid-2">
+          <div class="field">
+            <label for="label-width">Width (mm)</label>
+            <input id="label-width" type="number" step="0.1" min="5" />
+          </div>
+          <div class="field">
+            <label for="label-height">Height (mm)</label>
+            <input id="label-height" type="number" step="0.1" min="5" />
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="field">
+            <label for="gutter-x">Gutter X (mm)</label>
+            <input id="gutter-x" type="number" step="0.1" min="0" />
+          </div>
+          <div class="field">
+            <label for="gutter-y">Gutter Y (mm)</label>
+            <input id="gutter-y" type="number" step="0.1" min="0" />
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="field">
+            <label for="label-padding">Padding (mm)</label>
+            <input id="label-padding" type="number" step="0.1" min="0" />
+          </div>
+          <div class="field checkbox">
+            <label><input id="label-border" type="checkbox" /> Border</label>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="field">
+            <label for="font-size">Font size (px)</label>
+            <input id="font-size" type="number" step="1" min="6" />
+          </div>
+          <div class="field">
+            <label for="text-align">Text align</label>
+            <select id="text-align">
+              <option value="left">Left</option>
+              <option value="center">Center</option>
+              <option value="right">Right</option>
+            </select>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="field">
+            <label for="barcode-height">Barcode height (px)</label>
+            <input id="barcode-height" type="number" step="1" min="20" />
+          </div>
+          <div class="field">
+            <label for="qr-scale">QR size (% of label width)</label>
+            <input id="qr-scale" type="number" step="1" min="10" max="100" />
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Data</h2>
+        <div class="field">
+          <label for="input-format">Input format</label>
+          <select id="input-format">
+            <option value="csv">CSV (with header)</option>
+            <option value="lines">Newline list</option>
+          </select>
+        </div>
+        <div class="field small">
+          <div class="help">CSV headers supported: <code>title</code>, <code>subtitle</code>, <code>text</code>, <code>barcode</code>, <code>qrcode</code>, <code>copies</code></div>
+        </div>
+        <div class="field">
+          <textarea id="data-input" placeholder="Paste CSV or list here..."></textarea>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Options</h2>
+        <div class="field checkbox">
+          <label><input id="show-title" type="checkbox" /> Show title</label>
+        </div>
+        <div class="field checkbox">
+          <label><input id="show-subtitle" type="checkbox" /> Show subtitle</label>
+        </div>
+        <div class="field checkbox">
+          <label><input id="show-text" type="checkbox" /> Show text</label>
+        </div>
+        <div class="field checkbox">
+          <label><input id="show-barcode" type="checkbox" /> Show barcode</label>
+        </div>
+        <div class="field checkbox">
+          <label><input id="show-qrcode" type="checkbox" /> Show QR code</label>
+        </div>
+      </section>
+    </aside>
+
+    <section class="preview-pane">
+      <div id="preview-scale-wrap">
+        <div id="preview" class="preview"></div>
+      </div>
+    </section>
+  </main>
+
+  <script src="./app.js"></script>
+</body>
+</html>
+
